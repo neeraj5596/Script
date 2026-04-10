@@ -1,0 +1,13 @@
+#!/bin/bash
+servers="server1 server2 server3"
+
+for server in $servers
+do
+    echo "======================="
+    echo "Server: $server"
+    echo "======================="
+
+    ssh $server "hostname; date; uptime; uname -a"
+
+    echo ""
+done
