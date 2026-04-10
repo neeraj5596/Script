@@ -1,0 +1,14 @@
+#!/bin/bash
+
+servers="server1 server2 server3"
+
+for server in $servers
+do
+    echo "=============================="
+    echo "Updating Server: $server"
+    echo "=============================="
+
+    ssh $server "yum update -y; yum clean all"
+
+    echo ""
+done
