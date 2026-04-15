@@ -1,0 +1,25 @@
+#!/bin/bash
+
+servers=(
+15.206.94.38
+13.126.165.218
+)
+
+PORT=25
+TARGET="smtp-relay.gmail.com"
+
+echo "Checking connectivity to $TARGET on port $PORT"
+echo "--------------------------------------------"
+
+for server in "${servers[@]}"
+do
+    echo -n "Checking from $server ... "
+
+    ssh -o ConnectTimeout=5 $server "nc -zv $TARGET $PORT" &>/tmp/nc_output
+
+    if grep -q "succeeded" /tmp/nc_output; then
+        echo "✅ OPEN"
+    else
+        echo "❌ CLOSED / BLOCKED"
+    fi
+done
