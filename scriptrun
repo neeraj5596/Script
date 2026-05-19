@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SERVERS="Server1 Server2 Server3"
+
+for SERVER in $SERVERS
+do
+   echo "Running precheck on $SERVER"
+
+   ssh $SERVER "chmod +x /tmp/precheck.sh && /tmp/precheck.sh"
+
+done
