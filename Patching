@@ -1,0 +1,22 @@
+#!/bin/bash
+
+SERVERS="Server1 Server2 Server3"
+
+for SERVER in $SERVERS
+do
+   echo "Updating $SERVER..."
+
+   ERROR=$(ssh -q -T $SERVER "
+      yum update -y >/dev/null &&
+      yum clean all >/dev/null
+   " 2>&1)
+
+   if [ $? -eq 0 ]
+   then
+      echo "$SERVER : SUCCESS"
+   else
+      echo "$SERVER : FAILED"
+      echo "Error: $ERROR"
+   fi
+
+done
