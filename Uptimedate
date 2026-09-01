@@ -1,0 +1,27 @@
+#!/bin/bash
+
+SERVER_LIST="/home/neeraj/server.txt"
+REPORT="/home/neeraj/server_info_$(date +%Y%m%d_%H%M%S).txt"
+
+# Fixed email recipients
+MAIL_TO="person1@company.com person2@company.com person3@company.com"
+
+while read -r SERVER
+do
+    # Skip blank lines and comments
+    [[ -z "$SERVER" || "$SERVER" =~ ^# ]] && continue
+
+    echo "SERVER: $SERVER" >> "$REPORT"
+
+    ssh -o ConnectTimeout=10 \
+        -o BatchMode=yes \
+        "$SERVER" 'uname -a; date; uptime' >> "$REPORT" 2>&1
+
+    echo "" >> "$REPORT"
+
+done < "$SERVER_LIST"
+
+# Send TXT file as attachment
+mailx -s "RHEL Server Information Report - $(date '+%Y-%m-%d')" \
+-a "$REPORT" \
+"$MAIL_TO" < /dev/null
