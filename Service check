@@ -60,6 +60,7 @@ echo "==================================================" >> "$REPORT"
 echo "Report completed: $(date)" >> "$REPORT"
 echo "==================================================" >> "$REPORT"
 
-# Send email
+# Send TXT file as email attachment
 mailx -s "RHEL Service Status Report - $(date '+%Y-%m-%d')" \
-"$MAIL_TO" < "$REPORT"
+-a "$REPORT" \
+"$MAIL_TO" < /dev/null
