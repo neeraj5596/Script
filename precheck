@@ -11,6 +11,6 @@ do
         uptime
         uname -a
         date
-    '
+    ' 2>/dev/null
 
 done < "$SERVER_LIST"
