@@ -18,7 +18,7 @@ do
     echo "SERVER: $SERVER" >> "$REPORT"
     echo "--------------------------------------------------" >> "$REPORT"
 
-    ssh -T \
+    ssh -n -T \
         -o BatchMode=yes \
         "$SERVER" '
 
@@ -47,7 +47,9 @@ do
 
     ' >> "$REPORT" 2>&1
 
-    if [ $? -ne 0 ]; then
+    SSH_STATUS=$?
+
+    if [ $SSH_STATUS -ne 0 ]; then
         echo "ERROR: Unable to connect to server" >> "$REPORT"
     fi
 
