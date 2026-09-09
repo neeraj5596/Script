@@ -3,7 +3,6 @@
 SERVER_LIST="/home/neeraj/server.txt"
 REPORT="/home/neeraj/service_check_$(date +%Y%m%d_%H%M%S).txt"
 
-# Fixed email recipients
 MAIL_TO="person1@company.com person2@company.com person3@company.com"
 
 echo "==================================================" > "$REPORT"
@@ -13,14 +12,13 @@ echo "==================================================" >> "$REPORT"
 
 while read -r SERVER
 do
-    # Skip blank lines and comments
     [[ -z "$SERVER" || "$SERVER" =~ ^# ]] && continue
 
     echo "" >> "$REPORT"
     echo "SERVER: $SERVER" >> "$REPORT"
     echo "--------------------------------------------------" >> "$REPORT"
 
-    ssh -o ConnectTimeout=10 \
+    ssh -T \
         -o BatchMode=yes \
         "$SERVER" '
 
@@ -60,7 +58,6 @@ echo "==================================================" >> "$REPORT"
 echo "Report completed: $(date)" >> "$REPORT"
 echo "==================================================" >> "$REPORT"
 
-# Send TXT file as email attachment
 mailx -s "RHEL Service Status Report - $(date '+%Y-%m-%d')" \
 -a "$REPORT" \
 "$MAIL_TO" < /dev/null
