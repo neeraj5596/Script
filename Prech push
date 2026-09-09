@@ -1,0 +1,19 @@
+#!/bin/bash
+
+SERVER_LIST="/home/neeraj/server.txt"
+
+while read -r SERVER
+do
+    [[ -z "$SERVER" || "$SERVER" =~ ^# ]] && continue
+
+    echo "Copying prechk.sh to $SERVER..."
+
+    rsync -a prechk.sh "$SERVER:/tmp/"
+
+    if [ $? -eq 0 ]; then
+        echo "$SERVER : prechk.sh copied successfully"
+    else
+        echo "$SERVER : copy failed"
+    fi
+
+done < "$SERVER_LIST"
