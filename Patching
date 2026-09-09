@@ -1,22 +1,15 @@
 #!/bin/bash
 
-SERVERS="Server1 Server2 Server3"
-
-for SERVER in $SERVERS
+while read server
 do
-   echo "Updating $SERVER..."
+    echo "Patching $server..."
 
-   ERROR=$(ssh -q -T $SERVER "
-      yum update -y >/dev/null &&
-      yum clean all >/dev/null
-   " 2>&1)
+    ssh root@$server "yum clean all && yum update -y && yum clean all"
 
-   if [ $? -eq 0 ]
-   then
-      echo "$SERVER : SUCCESS"
-   else
-      echo "$SERVER : FAILED"
-      echo "Error: $ERROR"
-   fi
+    if [ $? -eq 0 ]; then
+        echo "$server patching completed"
+    else
+        echo "$server patching failed"
+    fi
 
-done
+done < server.txt
