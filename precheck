@@ -1,13 +1,16 @@
 #!/bin/bash
-servers="server1 server2 server3"
 
-for server in $servers
+SERVER_LIST="/home/neeraj/server.txt"
+
+while read -r SERVER
 do
-    echo "======================="
-    echo "Server: $server"
-    echo "======================="
+    [[ -z "$SERVER" || "$SERVER" =~ ^# ]] && continue
 
-    ssh $server "hostname; date; uptime; uname -a"
+    ssh -n -T -o BatchMode=yes "$SERVER" '
+        hostname
+        uptime
+        uname -a
+        date
+    '
 
-    echo ""
-done
+done < "$SERVER_LIST"
